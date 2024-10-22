@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MED.ai - Revolutionary Healthcare Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --accent-color: #feca57;
+            --text-color: #2d3436;
+            --bg-color: #f7f7f7;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        footer {
+            background-color: var(--text-color);
+            color: #fff;
+        }
+
+        .scroll-to-top, .search-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        .search-button {
+            right: 80px;
+        }
+
+        .scroll-to-top:hover, .search-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+
+        .shape-2 {
+            bottom: 20%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background-color: var(--secondary-color);
+            transform: rotate(45deg);
+        }
+
+        .shape-3 {
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 30px solid var(--primary-color);
+        }
+
+        /* New dynamic elements */
+        .pulse-circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float-icon 15s infinite linear;
+        }
+
+        @keyframes float-icon {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .feature-card .progress-ring {
+            width: 80px;
+            height: 80px;
+        }
+
+        .feature-card .progress-ring__circle {
+            transition: 0.35s stroke-dashoffset;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .chatbot-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .chatbot-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .chatbot-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .chatbot-message.user {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chatbot-message.bot {
+            background-color: var(--secondary-color);
+            color: white;
+            align-self: flex-start;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            background-color: white;
+        }
+
+        .chatbot-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .chatbot-input button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .appointment-calendar {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .calendar-day.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-heartbeat me-2"></i>MED.ai
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/docs">Docs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/booking">Book Appointment</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/chatbot">Chat Now</a></li>
+                </ul>
+                <button class="btn btn-custom ms-3">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 hero-content">
+                        <h1 class="hero-title">Revolutionizing Healthcare with AI</h1>
+                        <p class="hero-subtitle">Experience the future of medical assistance with MED.ai</p>
+                        <button class="btn btn-custom btn-lg me-3">Get Started</button>
+                        <button class="btn btn-outline-light btn-lg">Learn More</button>
+                    </div>
+                    <div class="col-lg-6 mt-5 mt-lg-0">
+                        <img src="/static/images/image4.jpg" alt="MED.ai Hero" class="hero-image">
+                    </div>
+                </div>
+            </div>
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="floating-icons" id="floatingIcons"></div>
+            <div class="pulse-circle" style="width: 300px; height: 300px; top: 20%; left: 10%;"></div>
+            <div class="pulse-circle" style="width: 200px; height: 200px; bottom: 15%; right: 5%;"></div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <h2 class="text-center section-title">Our AI-Powered Features</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card h-100 p-4 text-center">
+                            <svg class="progress-ring" width="80" height="80">
+                                <circle class="progress-ring__circle" stroke="var(--primary-color)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40"/>
+                            </svg>
+                            <i class="fas fa-eye feature-icon"></i>
+                            <h3>Ocular Scan</h3>
+                            <p>Predict diabetes and other ocular conditions with high accuracy.</p>
+                            <button class="btn btn-custom mt-3">Try Now</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100 p-4 text-center">
+                            <svg class="progress-ring" width="80" height="80">
+                                <circle class="progress-ring__circle" stroke="var(--primary-color)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40"/>
+                            </svg>
+                            <i class="fas fa-hand-sparkles feature-icon"></i>
+                            <h3>Skin Scan</h3>
+                            <p>Analyze skin conditions and get instant insights into potential dermatological issues.</p>
+                            <button class="btn btn-custom mt-3">Try Now</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100 p-4 text-center">
+                            <svg class="progress-ring" width="80" height="80">
+                                <circle class="progress-ring__circle" stroke="var(--primary-color)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40"/>
+                            </svg>
+                            <i class="fas fa-stethoscope  feature-icon"></i>
+                            <h3>Symptom to Disease</h3>
+                            <p>Predict potential diseases based on your symptoms.</p>
+                            <button class="btn btn-custom mt-3">Try Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="section-title">Advanced AI Chatbot</h2>
+                        <p class="mb-4">Our chatbot is trained on 40GB of medical textbooks and fine-tuned with the LLAMA 3.0 model. Experience the future of medical assistance today!</p>
+                    </div>
+                    <div class="col-md-6 mt-4 mt-md-0">
+                        <div class="chatbot-container">
+                            <div class="chatbot-messages" id="chatbotMessages">
+                                <div class="chatbot-message bot">Hello! </div>
+                            </div>
+                            <div class="chatbot-input">
+                                <input type="text" id="chatbotInput" placeholder="Type your message...">
+                                <button onclick="sendMessage()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <h2 class="text-center section-title">Book Your Appointment</h2>
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <div class="appointment-calendar">
+                            <div class="calendar-header">
+                                <button class="btn btn-custom" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                                <h3 id="currentMonth">June 2023</h3>
+                                <button class="btn btn-custom" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-4">Find and book appointments with nearby doctors based on your preferences. Our smart system matches you with the best healthcare professionals in your area.</p>
+                        <button class="btn btn-custom btn-lg">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container text-center">
+                <h2 class="section-title">Stay Updated</h2>
+                <p class="mb-5">Subscribe to our newsletter for the latest health tips and MED.ai updates.</p>
+                <form class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Enter your email">
+                            <button class="btn btn-custom" type="submit">Subscribe</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="py-5">
+            <div class="container">
+                <h2 class="text-center section-title">What Our Users Say</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <p class="mb-3">"MED.ai has revolutionized the way I manage my health. It's like having a doctor in my pocket!"</p>
+                            <h5 class="mb-1">John Doe</h5>
+                            <p class="text-muted">Patient</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <p class="mb-3">"As a healthcare professional, I'm impressed by the accuracy and efficiency of MED.ai's diagnostic tools."</p>
+                            <h5 class="mb-1">Dr. Jane Smith</h5>
+                            <p class="text-muted">Cardiologist</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <p class="mb-3">"The personalized health tips and reminders from MED.ai have helped me maintain a healthier lifestyle."</p>
+                            <h5 class="mb-1">Mike Johnson</h5>
+                            <p class="text-muted">Health Enthusiast</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="h5 mb-3">About MED.ai</h3>
+                    <p>MED.ai is a cutting-edge healthcare assistant powered by artificial intelligence, designed to revolutionize the way we approach medical diagnoses and patient care.</p>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="h5 mb-3">Quick Links</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="/about" class="text-white">About</a></li>
+                        <li><a href="/contact" class="text-white">Contact</a></li>
+                        <li><a href="/privacy-policy" class="text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h3 class="h5 mb-3">Connect with Us</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/Vinit710/MEDAI" class="text-white"><i class="fab fa-github me-2"></i>GitHub</a></li>
+                        <li><a href="#" class="text-white"><i class="fab fa-twitter me-2"></i>Twitter</a></li>
+                        <li><a href="#" class="text-white"><i class="fab fa-linkedin me-2"></i>LinkedIn</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="h5 mb-3">Contact Us</h3>
+                    <form>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" placeholder="Your email">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Your message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-custom">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <p class="text-center mb-0">&copy; 2023 MED.ai. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <button class="search-button" data-bs-toggle="modal" data-bs-target="#searchModal">
+        <i class="fas fa-search"></i>
+    </button>
+
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Search MED.ai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="search" class="form-control" placeholder="Search for health topics, services, or doctors...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Scroll to top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.style.display = 'block';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Animate elements on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.feature-card, .testimonial-card, .hero-image');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Floating icons
+        function createFloatingIcons() {
+            const iconContainer = document.getElementById('floatingIcons');
+            const icons = ['fa-heartbeat', 'fa-stethoscope', 'fa-user-md', 'fa-hospital', 'fa-pills'];
+            for (let i = 0; i < 20; i++) {
+                const icon = document.createElement('i');
+                icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon`;
+                icon.style.left = `${Math.random() * 100}%`;
+                icon.style.animationDelay = `${Math.random() * 15}s`;
+                iconContainer.appendChild(icon);
+            }
+        }
+
+        createFloatingIcons();
+
+        // Progress rings
+        function setProgress(el, percent) {
+            const circle = el.querySelector('circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+        }
+
+        document.querySelectorAll('.progress-ring').forEach(el => {
+            setProgress(el, Math.random() * 100);
+        });
+
+        // Chatbot functionality
+        function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            if (message) {
+                addMessage('user', message);
+                // Simulate bot response (replace with actual AI integration)
+                setTimeout(() => {
+                    addMessage('bot', 'Thank you for your message. How else can I assist you?');
+                }, 1000);
+                input.value = '';
+            }
+        }
+
+        function addMessage(sender, text) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chatbot-message', sender);
+            messageElement.textContent = text;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Calendar functionality
+        let currentDate = new Date();
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+                dayElement.textContent = day;
+                dayElement.addEventListener('click', () => selectDay(dayElement));
+                grid.appendChild(dayElement);
+            }
+
+            document.getElementById('currentMonth').textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function selectDay(dayElement) {
+            document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
+            dayElement.classList.add('active');
+        }
+
+        renderCalendar();
+    </script>
+</body>
+</html>

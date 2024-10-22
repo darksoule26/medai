@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .chat-container { display: flex; max-width: 1200px; margin: 50px auto; }
+        .chat-history { flex: 1; background-color: #ffffff; border-right: 1px solid #ccc; padding: 20px; height: 500px; overflow-y: auto; }
+        .chat-history-header { font-weight: bold; margin-bottom: 20px; }
+        .chat-content { flex: 3; padding: 20px; background-color: #fefefe; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .message { margin-bottom: 10px; padding: 10px; border-radius: 10px; }
+        .user-message { background-color: #007bff; color: white; align-self: flex-end; }
+        .bot-message { background-color: #f1f0f0; align-self: flex-start; }
+        #chatbox { overflow-y: auto; flex-grow: 1; }
+        #history-list div { cursor: pointer; color: blue; margin-bottom: 5px; }
+
+        /* Graphical background */
+        .chat-content {
+            background-image: url('background.png'); /* Replace with your actual background image URL */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Toggle bar styling */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .theme-toggle button {
+            margin-right: 10px;
+        }
+
+        /* Light and dark themes */
+        body.light-theme {
+            background-color: #ffffff;
+            color: black;
+        }
+        body.dark-theme {
+            background-color: #121212;
+            color: white;
+        }
+
+        /* Tooltips and tools button */
+        .tools-btn {
+            position: relative;
+        }
+        .tools-tooltip {
+            display: none;
+            position: absolute;
+            left: 0;
+            bottom: 40px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .tools-btn:hover .tools-tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body class="dark-theme"> <!-- Default is dark theme -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">MED.ai</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/chatbot">Chat Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="chat-history">
+            <div class="chat-history-header">Chat History</div>
+            <div id="history-list"></div>
+        </div>
+        <div class="chat-content">
+            <!-- Toggle between themes -->
+            <div class="theme-toggle">
+                <button id="doctorMode" class="btn btn-outline-primary">Doctor</button>
+                <button id="userMode" class="btn btn-outline-secondary">User</button>
+            </div>
+
+            <!-- Chatbox content -->
+            <div id="chatbox" class="d-flex flex-column">
+                <div class="message bot-message">
+                    <i class="fas fa-robot me-2"></i>How can I assist you today?
+                </div>
+            </div>
+
+            <!-- Input and tools -->
+            <div class="input-group mt-3">
+                <div class="tools-btn">
+                    <button class="btn btn-outline-secondary" id="toolsButton">Tools</button>
+                    <div class="tools-tooltip">
+                        <p>Ocular Scan</p>
+                        <p>X-ray Diagnosis</p>
+                    </div>
+                </div>
+                <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+                <button class="btn btn-primary" type="button" id="sendMessage">
+                    <i class="fas fa-paper-plane me-2"></i>Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendMessage');
+        const historyList = document.getElementById('history-list');
+        const toolsButton = document.getElementById('toolsButton');
+        const doctorMode = document.getElementById('doctorMode');
+        const userMode = document.getElementById('userMode');
+        let currentSession = [];
+        let sessionId;
+        let hasUserInteracted = false; // Track if user has interacted
+
+        // Initialize or load sessions
+        function initializeSession() {
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            sessionId = storedSessions.length + 1; // Start a new session
+            displayChatHistory(storedSessions);
+        }
+
+        // Save current chat session on page unload, but only if the user has interacted
+        function saveCurrentSession() {
+            if (!hasUserInteracted) return; // Don't save if user hasn't interacted
+
+            const storedSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+            storedSessions.push({ id: `Chat ${sessionId}`, messages: currentSession });
+            localStorage.setItem('chatSessions', JSON.stringify(storedSessions));
+        }
+
+        // Display chat history from previous sessions
+        function displayChatHistory(sessions) {
+            historyList.innerHTML = '';
+            sessions.forEach((session) => {
+                const historyItem = document.createElement('div');
+                historyItem.textContent = session.id;
+                historyItem.classList.add('history-item');
+                historyItem.addEventListener('click', () => loadChatHistory(session.messages));
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Load a previous chat session
+        function loadChatHistory(messages) {
+            chatbox.innerHTML = ''; // Clear current chatbox
+            messages.forEach(msg => addMessage(msg.content, msg.isUser)); // Load previous messages
+        }
+
+        // Add message to chatbox and current session
+        function addMessage(content, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+            messageDiv.innerHTML = isUser ? content : `<i class="fas fa-robot me-2"></i>${content}`;
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            // Save message in current session
+            currentSession.push({ content, isUser });
+        }
+
+        // Handle sending user message
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            hasUserInteracted = true; // Mark that user has interacted
+            // Add user message to chat
+            addMessage(message, true);
+            messageInput.value = '';
+
+            // Send message to server
+            try {
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                addMessage(data.reply, false);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Sorry, there was an error processing your request.', false);
+            }
+        }
+
+        // Theme toggle logic
+        doctorMode.addEventListener('click', () => {
+            document.body.classList.remove('dark-theme');
+            document.body.classList.add('light-theme');
+        });
+
+        userMode.addEventListener('click', () => {
+            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
+        });
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // When user reloads the page, save current session only if interacted
+        window.onbeforeunload = saveCurrentSession;
+
+        // Initialize new session when page loads
+        window.onload = initializeSession;
+    </script> 
+</body>
+</html>
